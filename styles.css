@@ -64,7 +64,7 @@ body {
 
 .form-btns-wrapper {
   float: right;
-  width: 105px;
+  width: 102px;
 }
 
 .form-btns {
@@ -83,10 +83,6 @@ button {
 
 select, input, button {
   font-family: inherit;
-}
-
-title {
-  letter-spacing: 2.3em;
 }
 
 .btn {

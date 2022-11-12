@@ -14,7 +14,15 @@
 <script src=""></script>
 
 <body>
-  <div style="font-size: 32px; letter-spacing: 0.175em;">h-pkit interactive demo</div>
+  <div style="font-size: 32px; letter-spacing: 0.175em; border-bottom: 1px dashed grey; text-align: center;">
+    h-pkit interactive demo
+  </div>
+  <div style="font-size: 12px; margin-top: 15px;">
+    sandbox demo for the <a href="https://github.com/halbu/h-pkit">h-pkit</a> pathfinding library
+  </div>
+  <div style="font-size: 12px; letter-spacing: normal">
+    left and right mouse button to place origin and goal, middle mouse button to add or remove obstacles
+  </div>
   <br>
   <div id="wrapper" style="display: flex; flex-direction: column;">
     <div style="background-color: #f2f2f288;">
@@ -29,7 +37,7 @@
       <form class="form-behaviour">
         
         <div class="float-container">
-          <div class="btn" id="btnToggleVis" onclick="hpKitDemo.toggleFormVisibility();">◄</div>
+          <div class="btn" id="btnToggleVis" title="Show/Hide Menu" onclick="hpKitDemo.toggleFormVisibility();">◄</div>
         </div>
 
         <div id="formInner">
@@ -77,8 +85,7 @@
 
     <div id="fcanv"></div>
   </div>
-  <div>hpkit repo: <a href="https://github.com/halbu/h-pkit">github.com/halbu/h-pkit</a></div>
-  <div>this demo repo: <a href="https://github.com/halbu/h-pkit-demo">github.com/halbu/h-pkit-demo</a></div>
+  <div style="font-size: 10px; margin-top: 20px;">by <a href="https://github.com/halbu">halbu</a>. code for this demo is <a href="https://github.com/halbu/h-pkit-demo">here</a>.</div>
 
 </body>
 
