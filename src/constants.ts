@@ -1,7 +1,4 @@
 export class Constants {
-  public static readonly CANVAS_WIDTH = 780;
-  public static readonly CANVAS_HEIGHT = 780;
-
   public static readonly GRID_SIZE = 39;
   public static readonly TILE_SIZE = 16;
 
@@ -67,23 +64,4 @@ export class Constants {
       Right: 1002
     }
   };
-
-  // positional offsets for the 8 principal directions, starting at N (up) and proceeding clockwise
-  public static readonly DIRECTIONS = [
-    { x: 0, y: -1 },
-    { x: 1, y: -1 },
-    { x: 1, y: 0 },
-    { x: 1, y: 1 },
-    { x: 0, y: 1 },
-    { x: -1, y: 1 },
-    { x: -1, y: 0 },
-    { x: -1, y: -1 },
-  ];
-
-public static readonly CARDINAL_DIRECTIONS = [
-    { x: 0, y: -1 },
-    { x: 1, y: 0 },
-    { x: 0, y: 1 },
-    { x: -1, y: 0 },
-  ];
 }
