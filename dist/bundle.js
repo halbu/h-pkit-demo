@@ -12,8 +12,6 @@ exports.Constants = void 0;
 class Constants {
 }
 exports.Constants = Constants;
-Constants.CANVAS_WIDTH = 780;
-Constants.CANVAS_HEIGHT = 780;
 Constants.GRID_SIZE = 39;
 Constants.TILE_SIZE = 16;
 Constants.INPUT = {
@@ -78,23 +76,6 @@ Constants.INPUT = {
         Right: 1002
     }
 };
-// positional offsets for the 8 principal directions, starting at N (up) and proceeding clockwise
-Constants.DIRECTIONS = [
-    { x: 0, y: -1 },
-    { x: 1, y: -1 },
-    { x: 1, y: 0 },
-    { x: 1, y: 1 },
-    { x: 0, y: 1 },
-    { x: -1, y: 1 },
-    { x: -1, y: 0 },
-    { x: -1, y: -1 },
-];
-Constants.CARDINAL_DIRECTIONS = [
-    { x: 0, y: -1 },
-    { x: 1, y: 0 },
-    { x: 0, y: 1 },
-    { x: -1, y: 0 },
-];
 
 
 /***/ }),
@@ -234,11 +215,13 @@ class HPKitDemo {
         dt = performance.now() - dt;
         this.handleInput();
         this.renderer.renderModel();
+        const numFrameTimesToStore = 120;
         this.timeArray.push(dt);
-        if (this.timeArray.length > 60) {
+        if (this.timeArray.length > numFrameTimesToStore) {
             this.timeArray.shift();
         }
-        let avgDt = this.timeArray.reduce((partial, e) => partial + e, 0) / 60;
+        let avgDt = this.timeArray.reduce((partial, e) => partial + e, 0) / numFrameTimesToStore;
+        HPKitDemo.elFromId('timerElement').innerText = `Updating at 60FPS with an average pathfinding time of ${avgDt.toFixed(2)} milliseconds`;
         this.inputManager.clearInput();
         this.awaitNextFrame();
     }

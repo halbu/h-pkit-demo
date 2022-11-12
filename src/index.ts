@@ -153,12 +153,16 @@ export class HPKitDemo {
 
     this.renderer.renderModel();
 
+    const numFrameTimesToStore = 120;
+
     this.timeArray.push(dt);
-    if (this.timeArray.length > 60) {
+    if (this.timeArray.length > numFrameTimesToStore) {
       this.timeArray.shift();
     }
 
-    let avgDt = this.timeArray.reduce((partial, e) => partial + e, 0) / 60;
+    let avgDt = this.timeArray.reduce((partial, e) => partial + e, 0) / numFrameTimesToStore;
+
+    HPKitDemo.elFromId('timerElement').innerText = `Updating at 60FPS with an average pathfinding time of ${avgDt.toFixed(2)} milliseconds`;
 
     this.inputManager.clearInput();
     this.awaitNextFrame();
