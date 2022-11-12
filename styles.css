@@ -1,0 +1,109 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  font-family: 'Kanit', sans-serif;
+  font-size: 15px;
+  background-color: hsl(194, 24%, 86%);
+  
+  -webkit-transition: width 1s ease-in-out;
+  -moz-transition: width 1s ease-in-out;
+  -o-transition: width 1s ease-in-out;
+  transition: width 1s ease-in-out;
+
+  color: black;
+}
+
+.cell {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  min-width: 16px;
+  min-height: 16px;
+  
+  border: 1px solid rgb(64, 64, 64, .125);
+  background-color: rgb(242, 242, 242);
+}
+
+.inner-cell {
+  display: flex;
+  margin: 2px;
+  background-color: #f2f2f200;
+  min-width: 8px;
+  min-height: 8px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.float-container {
+  float: right;
+}
+
+.form-behaviour {
+  z-index: 999;
+  position: fixed;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 3px;
+  padding: 6px;
+  background-color: #f2f2f2cc;
+}
+
+.form-btns-wrapper {
+  float: right;
+  width: 105px;
+}
+
+.form-btns {
+  z-index: 999;
+  position: fixed;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 3px;
+  padding: 6px;
+  background-color: #f2f2f2cc;
+}
+
+button {
+  margin: 1px 0px 1px 0px;
+}
+
+select, input, button {
+  font-family: inherit;
+}
+
+title {
+  letter-spacing: 2.3em;
+}
+
+.btn {
+  text-align: center;
+  border: 1px solid black;
+  min-width: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(172, 242, 210, 0.85)
+}
+
+/* Prevent the up-down arrow buttons from appearing on number input fields */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}

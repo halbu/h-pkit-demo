@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8" />
+<title id="title">h-pkit interactive demo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Ubuntu&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="./styles.css" />
+<style>
+</style>
+<script src=""></script>
+
+<body>
+  <div style="font-size: 32px; letter-spacing: 0.175em;">h-pkit interactive demo</div>
+  <br>
+  <div id="wrapper" style="display: flex; flex-direction: column;">
+    <div style="background-color: #f2f2f288;">
+      <div class="form-btns-wrapper">
+        <form class="form-btns" style="display: flex; flex-direction: column;">
+          <button type="button" onclick="hpd.randomise();">Randomise</button>
+          <button type="button" onclick="hpd.clear();">Clear</button>
+          <button type="button" onclick="hpd.reset();">Reset</button>
+        </form>
+      </div>
+      
+      <form class="form-behaviour">
+        
+        <div class="float-container">
+          <div class="btn" id="btnToggleVis" onclick="hpd.toggleFormVisibility();">◄</div>
+        </div>
+
+        <div id="formInner">
+          <input type="checkbox" id="chkAllowDiagonals" name="diagonalPrefCheckbox" checked>
+          <label for="diagonalPrefCheckbox">Allow diagonal moves (Hotkey: <strong>D</strong>)</strong></label>
+          <br>
+
+          <input type="checkbox" id="chkStraightLine" name="straightLinePrefCheckbox">
+          <label for="straightLinePrefCheckbox">Prefer straight-line path (Hotkey:
+            <strong>S</strong>)</strong></label>
+          <br>
+
+          <input type="checkbox" id="chkStringPull" name="stringPullingCheckbox">
+          <label for="stringPullingCheckbox">Naturalisation post-processing (Hotkey:
+            <strong>P</strong>)</strong></label>
+            <br>
+            <hr>
+
+          <label for="heuristic">Heuristic:</label>
+          <select name="heuristic" id="ddHeuristic">
+            <option value="octile">Octile</option>
+            <option value="euclidean">Euclidean</option>
+            <option value="chebyshev">Chebyshev</option>
+            <option value="manhattan">Manhattan</option>
+          </select>
+          (Hotkey: <strong>H</strong>)
+          <br>
+
+          <div style="display: flex; flex-direction: row;">
+            <div style="width: 165px;">
+              <label for="iMoveCostCardinal" style="width: 130px">Move Cost (Horizontal):</label>
+            </div>
+            <input type="number" id="iMoveCostCardinal" style="width: 50px" name="iMoveCostCardinal" size="8" value="1">
+          </div>
+
+          <div style="display: flex; flex-direction: row;">
+            <div style="width: 165px;">
+              <label for="iMoveCostDiagonal" style="width: 130px">Move Cost (Diagonal):</label>
+            </div>
+            <input type="number" id="iMoveCostDiagonal" style="width: 50px" name="iMoveCostDiagonal" size="8" value="1.41">
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="fcanv"></div>
+  </div>
+  <div>hpkit repo: <a href="https://github.com/halbu/h-pkit">github.com/halbu/h-pkit</a></div>
+  <div>this demo repo: <a href="https://github.com/halbu/h-pkit-demo">github.com/halbu/h-pkit-demo</a></div>
+
+</body>
+
+<script src="dist/bundle.js"></script>
+<script>
+  var hpKitDemo = new hpkitLib.HPKitDemo();
+</script>
+
+</html>
