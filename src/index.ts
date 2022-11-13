@@ -24,6 +24,8 @@ export class HPKitDemo {
   public smoothingTypes = ['dual', 'skip', 'noskip'];
   public smoothingTypeIndex = 0;
 
+  public static redrawNecessary: boolean = true;
+
   constructor() {
     this.init();
   }
@@ -57,9 +59,9 @@ export class HPKitDemo {
             this.state = this.model.grid[pos[0]][pos[1]] ? BuildState.REMOVING : BuildState.ADDING;
             this.modify(el);
           } else if (e.button === 0) {
-            this.model.origin = {x: Number(pos[0]), y: Number(pos[1])};
+            this.tryMoveOrigin(Number(pos[0]), Number(pos[1]));
           } else if (e.button === 2) {
-            this.model.goal = {x: Number(pos[0]), y: Number(pos[1])};
+            this.tryMoveGoal(Number(pos[0]), Number(pos[1]));
           }
         });
 
@@ -67,9 +69,9 @@ export class HPKitDemo {
           const el = HPKitDemo.elFromEvent(e);
           const pos = HPKitDemo.posFromEl(el);
           if(e.buttons === 1) {
-            this.model.origin = {x: Number(pos[0]), y: Number(pos[1])};
+            this.tryMoveOrigin(Number(pos[0]), Number(pos[1]));
           } else if(e.buttons === 2) {
-            this.model.goal = {x: Number(pos[0]), y: Number(pos[1])};
+            this.tryMoveGoal(Number(pos[0]), Number(pos[1]));
           } else if(e.buttons === 4) {
             this.modify(el);
           }
@@ -80,6 +82,7 @@ export class HPKitDemo {
     document.getElementById('ddHeuristic').addEventListener('change', (e) => {
       const nh = (<any>e.target).value;
       HPKitDemo.hpkit.setHeuristic(nh);
+      HPKitDemo.redrawNecessary = true;
     });
 
     this.chkboxDiagonals.addEventListener('change', (e) => {
@@ -100,22 +103,27 @@ export class HPKitDemo {
         HPKitDemo.hpkit.preferStraightLinePath(this.chkboxStraightLine.checked);
         HPKitDemo.hpkit.applyStringPulling(this.chkboxStringPull.checked);
       }
+      HPKitDemo.redrawNecessary = true;
     });
 
     this.chkboxStraightLine.addEventListener('change', (e) => {
       HPKitDemo.hpkit.preferStraightLinePath(this.chkboxStraightLine.checked);
+      HPKitDemo.redrawNecessary = true;
     })
 
     this.chkboxStringPull.addEventListener('change', (e) => {
       HPKitDemo.hpkit.applyStringPulling(this.chkboxStringPull.checked);
+      HPKitDemo.redrawNecessary = true;
     })
 
     this.inputMoveCostCardinal.addEventListener('input', (e) => {
       this.applyNewMoveCosts();
+      HPKitDemo.redrawNecessary = true;
     })
 
     this.inputMoveCostDiagonal.addEventListener('input', (e) => {
       this.applyNewMoveCosts();
+      HPKitDemo.redrawNecessary = true;
     })
 
     this.renderLoop();
@@ -135,7 +143,13 @@ export class HPKitDemo {
 
   public modify(el: HTMLElement) {
     let pos = HPKitDemo.posFromEl(el);
-    this.model.grid[pos[0]][pos[1]] = (this.state === BuildState.ADDING) ? true : false;
+    if (this.state === BuildState.ADDING && !this.model.grid[pos[0]][pos[1]]) {
+      this.model.grid[pos[0]][pos[1]] = true;
+      HPKitDemo.redrawNecessary = true;
+    } else if (this.state === BuildState.REMOVING && this.model.grid[pos[0]][pos[1]]) {
+      this.model.grid[pos[0]][pos[1]] = false;
+      HPKitDemo.redrawNecessary = true;
+    }
   }
 
   public applyNewMoveCosts(): void {
@@ -174,8 +188,25 @@ export class HPKitDemo {
     });
   }
 
+  public tryMoveOrigin(x: number, y: number): void {
+    if (x !== this.model.origin.x || y !== this.model.origin.y) {
+      this.model.origin.x = x;
+      this.model.origin.y = y;
+      HPKitDemo.redrawNecessary = true;
+    }
+  }
+
+  public tryMoveGoal(x: number, y: number): void {
+    if (x !== this.model.goal.x || y !== this.model.goal.y) {
+      this.model.goal.x = x;
+      this.model.goal.y = y;
+      HPKitDemo.redrawNecessary = true;
+    }
+  }
+
   public randomise(): void {
     this.model.randomise();
+    HPKitDemo.redrawNecessary = true;
   }
 
   public reset(): void {
@@ -188,17 +219,31 @@ export class HPKitDemo {
     this.inputMoveCostDiagonal.value = 1.41;
     this.inputMoveCostCardinal.value = 1;
     this.applyNewMoveCosts();
+    HPKitDemo.redrawNecessary = true;
   }
 
   public clear(): void {
     this.model.clear();
+    HPKitDemo.redrawNecessary = true;
   }
   
   public handleInput(): void {
     switch (this.inputManager.KP) {
-      case Constants.INPUT.Keys.D: this.chkboxDiagonals.click(); break;
-      case Constants.INPUT.Keys.S: this.chkboxStraightLine.click(); break;
-      case Constants.INPUT.Keys.P: this.chkboxStringPull.click(); break;
+      case Constants.INPUT.Keys.D: {
+        this.chkboxDiagonals.click();    
+        HPKitDemo.redrawNecessary = true;
+        break;
+      }
+      case Constants.INPUT.Keys.S: {
+        this.chkboxStraightLine.click();
+        HPKitDemo.redrawNecessary = true;
+        break;
+      }
+      case Constants.INPUT.Keys.P: {
+        this.chkboxStringPull.click();
+        HPKitDemo.redrawNecessary = true;
+        break;
+      }
       // case Constants.INPUT.Keys.K: {
       //   this.smoothingTypeIndex = ((this.smoothingTypeIndex + 1) % this.smoothingTypes.length);
       //   HPD.hpkit.setSmoothingType(this.smoothingTypes[this.smoothingTypeIndex]);
@@ -209,6 +254,7 @@ export class HPKitDemo {
         this.dropdownHeuristic.selectedIndex++;
         if (this.dropdownHeuristic.selectedIndex === -1) this.dropdownHeuristic.selectedIndex = 0;
         HPKitDemo.hpkit.setHeuristic(this.dropdownHeuristic.value);
+        HPKitDemo.redrawNecessary = true;
         break;
       }
     }

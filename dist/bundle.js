@@ -129,20 +129,20 @@ class HPKitDemo {
                         this.modify(el);
                     }
                     else if (e.button === 0) {
-                        this.model.origin = { x: Number(pos[0]), y: Number(pos[1]) };
+                        this.tryMoveOrigin(Number(pos[0]), Number(pos[1]));
                     }
                     else if (e.button === 2) {
-                        this.model.goal = { x: Number(pos[0]), y: Number(pos[1]) };
+                        this.tryMoveGoal(Number(pos[0]), Number(pos[1]));
                     }
                 });
                 HPKitDemo.elFromId(`${j}-${i}`).addEventListener("mouseover", (e) => {
                     const el = HPKitDemo.elFromEvent(e);
                     const pos = HPKitDemo.posFromEl(el);
                     if (e.buttons === 1) {
-                        this.model.origin = { x: Number(pos[0]), y: Number(pos[1]) };
+                        this.tryMoveOrigin(Number(pos[0]), Number(pos[1]));
                     }
                     else if (e.buttons === 2) {
-                        this.model.goal = { x: Number(pos[0]), y: Number(pos[1]) };
+                        this.tryMoveGoal(Number(pos[0]), Number(pos[1]));
                     }
                     else if (e.buttons === 4) {
                         this.modify(el);
@@ -153,6 +153,7 @@ class HPKitDemo {
         document.getElementById('ddHeuristic').addEventListener('change', (e) => {
             const nh = e.target.value;
             HPKitDemo.hpkit.setHeuristic(nh);
+            HPKitDemo.redrawNecessary = true;
         });
         this.chkboxDiagonals.addEventListener('change', (e) => {
             // If we've disallowed diagonal movement, we must necessarily disable
@@ -173,18 +174,23 @@ class HPKitDemo {
                 HPKitDemo.hpkit.preferStraightLinePath(this.chkboxStraightLine.checked);
                 HPKitDemo.hpkit.applyStringPulling(this.chkboxStringPull.checked);
             }
+            HPKitDemo.redrawNecessary = true;
         });
         this.chkboxStraightLine.addEventListener('change', (e) => {
             HPKitDemo.hpkit.preferStraightLinePath(this.chkboxStraightLine.checked);
+            HPKitDemo.redrawNecessary = true;
         });
         this.chkboxStringPull.addEventListener('change', (e) => {
             HPKitDemo.hpkit.applyStringPulling(this.chkboxStringPull.checked);
+            HPKitDemo.redrawNecessary = true;
         });
         this.inputMoveCostCardinal.addEventListener('input', (e) => {
             this.applyNewMoveCosts();
+            HPKitDemo.redrawNecessary = true;
         });
         this.inputMoveCostDiagonal.addEventListener('input', (e) => {
             this.applyNewMoveCosts();
+            HPKitDemo.redrawNecessary = true;
         });
         this.renderLoop();
     }
@@ -202,7 +208,14 @@ class HPKitDemo {
     }
     modify(el) {
         let pos = HPKitDemo.posFromEl(el);
-        this.model.grid[pos[0]][pos[1]] = (this.state === BuildState.ADDING) ? true : false;
+        if (this.state === BuildState.ADDING && !this.model.grid[pos[0]][pos[1]]) {
+            this.model.grid[pos[0]][pos[1]] = true;
+            HPKitDemo.redrawNecessary = true;
+        }
+        else if (this.state === BuildState.REMOVING && this.model.grid[pos[0]][pos[1]]) {
+            this.model.grid[pos[0]][pos[1]] = false;
+            HPKitDemo.redrawNecessary = true;
+        }
     }
     applyNewMoveCosts() {
         const mc = Number(this.inputMoveCostCardinal.value);
@@ -230,8 +243,23 @@ class HPKitDemo {
             this.renderLoop();
         });
     }
+    tryMoveOrigin(x, y) {
+        if (x !== this.model.origin.x || y !== this.model.origin.y) {
+            this.model.origin.x = x;
+            this.model.origin.y = y;
+            HPKitDemo.redrawNecessary = true;
+        }
+    }
+    tryMoveGoal(x, y) {
+        if (x !== this.model.goal.x || y !== this.model.goal.y) {
+            this.model.goal.x = x;
+            this.model.goal.y = y;
+            HPKitDemo.redrawNecessary = true;
+        }
+    }
     randomise() {
         this.model.randomise();
+        HPKitDemo.redrawNecessary = true;
     }
     reset() {
         this.model.setup();
@@ -246,21 +274,29 @@ class HPKitDemo {
         this.inputMoveCostDiagonal.value = 1.41;
         this.inputMoveCostCardinal.value = 1;
         this.applyNewMoveCosts();
+        HPKitDemo.redrawNecessary = true;
     }
     clear() {
         this.model.clear();
+        HPKitDemo.redrawNecessary = true;
     }
     handleInput() {
         switch (this.inputManager.KP) {
-            case constants_1.Constants.INPUT.Keys.D:
+            case constants_1.Constants.INPUT.Keys.D: {
                 this.chkboxDiagonals.click();
+                HPKitDemo.redrawNecessary = true;
                 break;
-            case constants_1.Constants.INPUT.Keys.S:
+            }
+            case constants_1.Constants.INPUT.Keys.S: {
                 this.chkboxStraightLine.click();
+                HPKitDemo.redrawNecessary = true;
                 break;
-            case constants_1.Constants.INPUT.Keys.P:
+            }
+            case constants_1.Constants.INPUT.Keys.P: {
                 this.chkboxStringPull.click();
+                HPKitDemo.redrawNecessary = true;
                 break;
+            }
             // case Constants.INPUT.Keys.K: {
             //   this.smoothingTypeIndex = ((this.smoothingTypeIndex + 1) % this.smoothingTypes.length);
             //   HPD.hpkit.setSmoothingType(this.smoothingTypes[this.smoothingTypeIndex]);
@@ -272,6 +308,7 @@ class HPKitDemo {
                 if (this.dropdownHeuristic.selectedIndex === -1)
                     this.dropdownHeuristic.selectedIndex = 0;
                 HPKitDemo.hpkit.setHeuristic(this.dropdownHeuristic.value);
+                HPKitDemo.redrawNecessary = true;
                 break;
             }
         }
@@ -279,6 +316,7 @@ class HPKitDemo {
     }
 }
 exports.HPKitDemo = HPKitDemo;
+HPKitDemo.redrawNecessary = true;
 HPKitDemo.elFromId = (str) => document.getElementById(str);
 HPKitDemo.elFromEvent = (e) => HPKitDemo.elFromId(e.currentTarget.id);
 HPKitDemo.posFromEl = (el) => el.id.split('-');
@@ -423,6 +461,9 @@ class Renderer {
         this.model = _model;
     }
     renderModel() {
+        if (!_1.HPKitDemo.redrawNecessary) {
+            return;
+        }
         for (var i = 0; i != constants_1.Constants.GRID_SIZE; ++i) {
             for (var j = 0; j != constants_1.Constants.GRID_SIZE; ++j) {
                 const outerEl = _1.HPKitDemo.elFromId(`${i}-${j}`);
@@ -451,6 +492,7 @@ class Renderer {
                 _1.HPKitDemo.elFromId(`i-${p[0]}-${p[1]}`).style.borderRadius = '2px';
             });
         }
+        _1.HPKitDemo.redrawNecessary = false;
     }
 }
 exports.Renderer = Renderer;

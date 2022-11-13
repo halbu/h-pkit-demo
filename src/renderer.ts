@@ -10,6 +10,10 @@ export class Renderer {
   }
 
   public renderModel(): void {
+    if (!HPKitDemo.redrawNecessary) {
+      return;
+    }
+
     for (var i = 0; i != Constants.GRID_SIZE; ++i) {
       for (var j = 0; j != Constants.GRID_SIZE; ++j) {
         const outerEl = HPKitDemo.elFromId(`${i}-${j}`);
@@ -39,5 +43,7 @@ export class Renderer {
         HPKitDemo.elFromId(`i-${p[0]}-${p[1]}`).style.borderRadius = '2px'
       })
     }
+
+    HPKitDemo.redrawNecessary = false;
   }
 }
