@@ -14,13 +14,13 @@
 <script src=""></script>
 
 <body>
-  <div style="font-size: 32px; letter-spacing: 0.175em; border-bottom: 1px dashed grey; text-align: center;">
+  <div class="title" style="border-bottom: 1px dashed grey; text-align: center;">
     h-pkit interactive demo
   </div>
   <div style="font-size: 12px; margin-top: 8px;">
     sandbox demo for the <a href="https://github.com/halbu/h-pkit">h-pkit</a> pathfinding library
   </div>
-  <div style="font-size: 12px; margin-bottom: 8px;">
+  <div style="font-size: 12px; margin-bottom: 8px; text-align: center;">
     left and right mouse button to place origin and goal, middle mouse button to add or remove obstacles
   </div>
   <div id="wrapper" style="display: flex; flex-direction: column;">
@@ -66,14 +66,14 @@
           <br>
 
           <div style="display: flex; flex-direction: row;">
-            <div style="width: 165px;">
+            <div class="num-input-label">
               <label for="iMoveCostCardinal" style="width: 130px">Move Cost (Horizontal):</label>
             </div>
             <input type="number" id="iMoveCostCardinal" style="width: 50px" name="iMoveCostCardinal" size="8" value="1">
           </div>
 
           <div style="display: flex; flex-direction: row;">
-            <div style="width: 165px;">
+            <div class="num-input-label">
               <label for="iMoveCostDiagonal" style="width: 130px">Move Cost (Diagonal):</label>
             </div>
             <input type="number" id="iMoveCostDiagonal" style="width: 50px" name="iMoveCostDiagonal" size="8" value="1.41">
@@ -84,7 +84,7 @@
 
     <div id="fcanv"></div>
   </div>
-  <div id="timerElement" style="font-size: 12px; margin-top: 2px;">
+  <div id="timerElement" style="font-size: 12px; margin-top: 2px; text-align: center;">
     &nbsp;
   </div>
   <div style="color: darkgrey; font-size: 9px; margin-top: 10px;">by <a href="https://github.com/halbu">halbu</a>. code for this demo is <a href="https://github.com/halbu/h-pkit-demo">here</a>.</div>

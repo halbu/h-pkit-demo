@@ -2,11 +2,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
   flex-direction: column;
 
   font-family: 'Kanit', sans-serif;
-  font-size: 15px;
   background-color: hsl(194, 24%, 86%);
   
   -webkit-transition: width 1s ease-in-out;
@@ -28,9 +26,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  min-width: 14px;
-  min-height: 14px;
   
   border: 1px solid rgb(64, 64, 64, .125);
   background-color: rgb(242, 242, 242);
@@ -98,6 +93,95 @@ select, input, button {
   border-radius: 4px;
   cursor: pointer;
   background-color: rgb(172, 242, 210, 0.85)
+}
+
+.num-input-label {
+  width: 165px;
+}
+
+/* all the stuff that has to be set per-width... */
+@media screen and (max-width: 440px) {
+  select, input, button, form {
+    font-family: inherit;
+    font-size: 8px;
+  }
+  .cell {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+  }
+  .inner-cell {
+    width: 4px;
+    height: 4px;
+    min-width: 4px;
+    min-height: 4px;
+  }
+  .title {
+    font-size: 16px;
+    letter-spacing: normal; 
+  }
+  .form-btns-wrapper {
+    width: 75px;
+  }
+  .num-input-label {
+    width: 100px;
+  }
+}
+
+@media screen and (min-width: 421px) and (max-width: 599px) {
+  select, input, button, form {
+    font-family: inherit;
+    font-size: 10px;
+  }
+  .cell {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+  }
+  .inner-cell {
+    width: 5px;
+    height: 5px;
+    min-width: 5px;
+    min-height: 5px;
+  }
+  .title {
+    font-size: 24px;
+    letter-spacing: 0.1em; 
+  }
+  .form-btns-wrapper {
+    width: 86px;
+  }
+  .num-input-label {
+    width: 125px;
+  }
+}
+
+@media screen and (min-width: 600px) /*and (max-width: 999px)*/ {
+  select, input, button, form {
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .cell {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+  }
+  .inner-cell {
+    width: 7px;
+    height: 7px;
+    min-width: 7px;
+    min-height: 7px;
+  }
+  .title {
+    font-size: 32px;
+    letter-spacing: 0.175em; 
+  }
+  .num-input-label {
+    width: 150px;
+  }
 }
 
 /* Prevent the up-down arrow buttons from appearing on number input fields */
