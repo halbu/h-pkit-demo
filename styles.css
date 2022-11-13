@@ -2,6 +2,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   flex-direction: column;
 
   font-family: 'Kanit', sans-serif;
@@ -28,8 +29,8 @@ body {
   align-items: center;
   justify-content: center;
   
-  min-width: 16px;
-  min-height: 16px;
+  min-width: 14px;
+  min-height: 14px;
   
   border: 1px solid rgb(64, 64, 64, .125);
   background-color: rgb(242, 242, 242);
@@ -39,8 +40,8 @@ body {
   display: flex;
   margin: 2px;
   background-color: #f2f2f200;
-  min-width: 8px;
-  min-height: 8px;
+  min-width: 7px;
+  min-height: 7px;
 }
 
 .row {
@@ -50,6 +51,10 @@ body {
 
 .float-container {
   float: right;
+}
+
+form {
+  font-size: 12px;
 }
 
 .form-behaviour {
@@ -64,7 +69,7 @@ body {
 
 .form-btns-wrapper {
   float: right;
-  width: 102px;
+  width: 95px;
 }
 
 .form-btns {
@@ -83,6 +88,7 @@ button {
 
 select, input, button {
   font-family: inherit;
+  font-size: 12px;
 }
 
 .btn {

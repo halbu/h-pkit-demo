@@ -21,22 +21,25 @@ export class Model {
     }
 
     for (var i = 0; i != 11; ++i) {
-      this.grid[14 + i][19] = true;
-      this.grid[12][14 + i] = true;
-      this.grid[13][14 + i] = true;
-      this.grid[25][14 + i] = true;
-      this.grid[26][14 + i] = true;
+      this.grid[12 + i][17] = true;
+    }
+
+    for (var i = 0; i != 9; ++i) {
+      this.grid[11][13 + i] = true;
+      this.grid[12][13 + i] = true;
+      this.grid[22][13 + i] = true;
+      this.grid[23][13 + i] = true;
     }
 
     for (var i = 0; i != 12; ++i) {
-      this.grid[27 + i][14] = true;
-      this.grid[11 - i][24] = true;
+      this.grid[23 + i][13] = true;
+      this.grid[11 - i][21] = true;
     }
 
-    this.grid[19][19] = false;
+    this.grid[17][17] = false;
 
-    this.origin = {x : 10, y : 14};
-    this.goal = {x : 28, y : 24};
+    this.origin = {x : 9, y : 13};
+    this.goal = {x : 25, y : 21};
   }
 
   public clear(): void {
