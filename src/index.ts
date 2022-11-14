@@ -26,6 +26,9 @@ export class HPKitDemo {
 
   public static redrawNecessary: boolean = true;
 
+  private lastFrameTime: number = 0;
+  private deltaTime: number = 0;
+
   constructor() {
     this.init();
   }
@@ -126,7 +129,10 @@ export class HPKitDemo {
       HPKitDemo.redrawNecessary = true;
     })
 
-    this.renderLoop();
+    setTimeout(() => {
+      this.lastFrameTime = performance.now();
+      window.requestAnimationFrame(() => this.renderLoop());
+    }, 100);
   }
 
   public toggleFormVisibility(): void {
@@ -158,7 +164,14 @@ export class HPKitDemo {
     HPKitDemo.hpkit.setMoveCosts(mc, md);
   }
 
-  public renderLoop(): void {
+  public async renderLoop(): Promise<void> {
+    this.deltaTime = performance.now() - this.lastFrameTime;
+    
+    while (this.deltaTime < Constants.MILLIS_PER_FRAME) {
+      await this.sleep(Constants.MILLIS_PER_FRAME - this.deltaTime);
+      this.deltaTime = performance.now() - this.lastFrameTime;
+    }
+
     let dt = performance.now();
     this.model.findPath();
     dt = performance.now() - dt;
@@ -179,13 +192,13 @@ export class HPKitDemo {
     HPKitDemo.elFromId('timerElement').innerText = `Updating at 60FPS with an average pathfinding time of ${avgDt.toFixed(2)} milliseconds`;
 
     this.inputManager.clearInput();
-    this.awaitNextFrame();
+    
+    this.lastFrameTime = performance.now();
+    window.requestAnimationFrame(() => this.renderLoop());
   }
 
-  public awaitNextFrame(): void {
-    window.requestAnimationFrame(() => {
-      this.renderLoop();
-    });
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   public tryMoveOrigin(x: number, y: number): void {

@@ -1,6 +1,8 @@
 export class Constants {
   public static readonly GRID_SIZE = 35;
   public static readonly TILE_SIZE = 14;
+  
+  public static readonly MILLIS_PER_FRAME: number = 17;
 
   public static readonly INPUT = {
     None: -1,

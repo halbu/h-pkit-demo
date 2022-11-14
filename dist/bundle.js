@@ -14,6 +14,7 @@ class Constants {
 exports.Constants = Constants;
 Constants.GRID_SIZE = 35;
 Constants.TILE_SIZE = 14;
+Constants.MILLIS_PER_FRAME = 17;
 Constants.INPUT = {
     None: -1,
     Keys: {
@@ -81,9 +82,18 @@ Constants.INPUT = {
 /***/ }),
 
 /***/ 591:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.HPKitDemo = void 0;
 const h_pkit_1 = __webpack_require__(80);
@@ -106,6 +116,8 @@ class HPKitDemo {
         this.inputMoveCostDiagonal = document.getElementById('iMoveCostDiagonal');
         this.smoothingTypes = ['dual', 'skip', 'noskip'];
         this.smoothingTypeIndex = 0;
+        this.lastFrameTime = 0;
+        this.deltaTime = 0;
         this.init();
     }
     init() {
@@ -192,7 +204,10 @@ class HPKitDemo {
             this.applyNewMoveCosts();
             HPKitDemo.redrawNecessary = true;
         });
-        this.renderLoop();
+        setTimeout(() => {
+            this.lastFrameTime = performance.now();
+            window.requestAnimationFrame(() => this.renderLoop());
+        }, 100);
     }
     toggleFormVisibility() {
         if (this.formState === FormState.OPEN) {
@@ -223,25 +238,31 @@ class HPKitDemo {
         HPKitDemo.hpkit.setMoveCosts(mc, md);
     }
     renderLoop() {
-        let dt = performance.now();
-        this.model.findPath();
-        dt = performance.now() - dt;
-        this.handleInput();
-        this.renderer.renderModel();
-        const numFrameTimesToStore = 120;
-        this.timeArray.push(dt);
-        if (this.timeArray.length > numFrameTimesToStore) {
-            this.timeArray.shift();
-        }
-        let avgDt = this.timeArray.reduce((partial, e) => partial + e, 0) / numFrameTimesToStore;
-        HPKitDemo.elFromId('timerElement').innerText = `Updating at 60FPS with an average pathfinding time of ${avgDt.toFixed(2)} milliseconds`;
-        this.inputManager.clearInput();
-        this.awaitNextFrame();
-    }
-    awaitNextFrame() {
-        window.requestAnimationFrame(() => {
-            this.renderLoop();
+        return __awaiter(this, void 0, void 0, function* () {
+            this.deltaTime = performance.now() - this.lastFrameTime;
+            while (this.deltaTime < constants_1.Constants.MILLIS_PER_FRAME) {
+                yield this.sleep(constants_1.Constants.MILLIS_PER_FRAME - this.deltaTime);
+                this.deltaTime = performance.now() - this.lastFrameTime;
+            }
+            let dt = performance.now();
+            this.model.findPath();
+            dt = performance.now() - dt;
+            this.handleInput();
+            this.renderer.renderModel();
+            const numFrameTimesToStore = 120;
+            this.timeArray.push(dt);
+            if (this.timeArray.length > numFrameTimesToStore) {
+                this.timeArray.shift();
+            }
+            let avgDt = this.timeArray.reduce((partial, e) => partial + e, 0) / numFrameTimesToStore;
+            HPKitDemo.elFromId('timerElement').innerText = `Updating at 60FPS with an average pathfinding time of ${avgDt.toFixed(2)} milliseconds`;
+            this.inputManager.clearInput();
+            this.lastFrameTime = performance.now();
+            window.requestAnimationFrame(() => this.renderLoop());
         });
+    }
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
     tryMoveOrigin(x, y) {
         if (x !== this.model.origin.x || y !== this.model.origin.y) {
